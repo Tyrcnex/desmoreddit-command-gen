@@ -3,7 +3,7 @@ name: "intersect"
 aliases: ["getintersect", "varintersect"]
 description: "Explains how to assign the intersection of two or more functions as a variable."
 ---
-# Getting the intersectino of two or more functions as a variable
+# Getting the intersection of two or more functions as a variable
 
 It's well known that you can click on the intersection between two graphed functions to get their intersection. But what if you want the intersection to automatically be assigned to a variable?
 
