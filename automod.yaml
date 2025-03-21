@@ -4,12 +4,16 @@ comment: "I've PM'ed the list of commands to you!"
 message: |
     # All commands
     
+    - `!help`: Brings up a list of all the commands.
+        - Aliases: `hlp`
     - `!desmodder`: Describes what DesModder is.
-        - aliases: `dsm`, `dsmodder`
+        - Aliases: `dsm`, `dsmodder`
     - `!fp`: Describes what floating point arithmetic is and how to mitigate problems associated with it.
-        - aliases: `floatp`, `floatingp`
+        - Aliases: `floatp`, `floatingp`
+    - `!grid`: Explains how to make a grid of points.
+        - Aliases: `ptgrid`, `pointgrid`
     - `!intersect`: Explains how to assign the intersection of two or more functions as a variable.
-        - aliases: `getintersect`, `varintersect`
+        - Aliases: `getintersect`, `varintersect`
 ---
 
 # `!desmodder`: Describes what DesModder is.
@@ -62,6 +66,19 @@ comment: |
     There are also other issues related to big numbers. For example, `(2^53+1)-2^53 → 0`. This is because there's not enough precision to represent `2^53+1` exactly, so it rounds. Also, `2^1024` and above is undefined.
     
     For more on floating point numbers, take a look at [radian628's article on floating point numbers in Desmos](https://radian628.github.io/unofficial-desmos-wiki/misc/floating-point-numbers/).
+---
+
+# `!grid`: Explains how to make a grid of points.
+type: comment
+body (regex): "^(?i)!(grid|ptgrid|pointgrid)[\\s\\S]*"
+comment: |
+    # Grid of points
+    
+    To make a grid of points, use a list comprehension. For example:
+    
+        [(x,y) for x=[0...3], y=[0...7]]
+    
+    You may omit the outer square brackets. For more, see the [Lists help article](https://help.desmos.com/hc/en-us/articles/4407889068557-Lists), and scroll down to the section labeled "List Comprehension".
 ---
 
 # `!intersect`: Explains how to assign the intersection of two or more functions as a variable.
