@@ -7,7 +7,7 @@ const files = fs.readdirSync("commands", "utf-8");
 const yamls = [];
 
 let helpMessage = `type: comment
-body (regex): "^(?i)!(help|hlp)[\\\\s\\\\S]*
+body (regex): "^(?i)!(help|hlp)[\\\\s\\\\S]*"
 comment: "I've PM'ed the list of commands to you!"
 message: |
     # All commands
