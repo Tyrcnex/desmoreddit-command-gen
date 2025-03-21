@@ -1,0 +1,87 @@
+type: comment
+body (regex): "^(?i)!(help|hlp)[\\s\\S]*
+comment: "I've PM'ed the list of commands to you!"
+message: |
+    # All commands
+    
+    - `!desmodder`: Describes what DesModder is.
+        - aliases: `dsm`, `dsmodder`
+    - `!fp`: Describes what floating point arithmetic is and how to mitigate problems associated with it.
+        - aliases: `floatp`, `floatingp`
+    - `!intersect`: Explains how to assign the intersection of two or more functions as a variable.
+        - aliases: `getintersect`, `varintersect`
+---
+
+# `!desmodder`: Describes what DesModder is.
+type: comment
+body (regex): "^(?i)!(desmodder|dsm|dsmodder)[\\s\\S]*"
+comment: |
+    # Desmodder
+    
+    [**DesModder**](https://www.desmodder.com/) is a browser extension designed to enhance your Desmos graph creation experience.
+    
+    ## Installation:
+    
+    - **Chrome/Chromium-based browsers**: Get [DesModder on the Chrome Web Store](https://chromewebstore.google.com/detail/desmodder-for-desmos/eclmfdfimjhkmjglgdldedokjaemjfjp)
+    
+    - **Firefox**: Get the [Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/desmodder-for-desmos/)
+    
+    - **Advanced installation**: See https://www.desmodder.com/installation/
+    
+    ---
+    
+    Some of DesModder's most popular features include:
+    
+    - **GLesmos**: Render implicit-filled equations on the GPU (which can help boost speed)
+    
+    - **Video creator**: Export videos, GIFs, and images of your graphs based on actions or sliders
+    
+    - **Text mode**: View your expressions as plain text (beta)
+    
+    - **Autocomplete**: Autocomplete variable names, jump to definitions, and make your own documentation
+    
+    - **Better input**: Use Shift+Enter to write newlines in notes, right-click to open style menu, and Ctrl+Q to duplicate expression
+    
+    - **Error hiding**: Hide and ignore unwanted slider suggestions or other errors
+    
+    - **Better Evaluation View**: Display different types of undefined values in expression list
+    
+    - **WakaTime integration**: View your Desmos stats on WakaTime
+    
+    There are many, many more features, including pasting ASCIIMath, pinning expressions, graph performance metrics, folder management tools, Mathquill config, displaying code golf stats, debug mode, compact mode, multiline expressions, and bracket highlighting. DesModder is in constant development, so there's more to come!
+---
+
+# `!fp`: Describes what floating point arithmetic is and how to mitigate problems associated with it.
+type: comment
+body (regex): "^(?i)!(fp|floatp|floatingp)[\\s\\S]*"
+comment: |
+    # Floating point arithmetic
+    
+    In Desmos and many computational systems, numbers are represented using floating-point arithmetic, which can't precisely represent all real numbers. This leads to tiny rounding errors. For example, `√5` is not represented as exactly `√5`: it uses a finite decimal approximation. This is why doing something like `(√5)^2-5` yields an answer that is very close to, but not exactly 0. If you want to check for equality, you should use an appropriate `ε` value. For example, you could set `ε=10^-9` and then use `{|a-b|<ε}` to check for equality between two values `a` and `b`.
+    
+    There are also other issues related to big numbers. For example, `(2^53+1)-2^53 → 0`. This is because there's not enough precision to represent `2^53+1` exactly, so it rounds. Also, `2^1024` and above is undefined.
+    
+    For more on floating point numbers, take a look at [radian628's article on floating point numbers in Desmos](https://radian628.github.io/unofficial-desmos-wiki/misc/floating-point-numbers/).
+---
+
+# `!intersect`: Explains how to assign the intersection of two or more functions as a variable.
+type: comment
+body (regex): "^(?i)!(intersect|getintersect|varintersect)[\\s\\S]*"
+comment: |
+    # Getting the intersectino of two or more functions as a variable
+    
+    It's well known that you can click on the intersection between two graphed functions to get their intersection. But what if you want the intersection to automatically be assigned to a variable?
+    
+    If you want to get *one* intersection, this is easy: use a regression! Given two functions `y=f(x)` and `y=g(x)`, you can do this to get the intersection point:
+    
+        f(c)~g(c)
+        (c,f(c))     <-- this is the intersection point
+    
+    Or, if you have two implicit equations such that `f(x,y)=0` and `g(x,y)=0`:
+    
+        [f(a,b), g(a,b)] ~ 0
+        (a,b)        <-- this is the intersection point
+    
+    If you want to find one intersection point *without* regression, you can try using simple root-finding algorithms such as Newton-Raphson or the bisection method.
+    
+    If you need *all* intersection points, that's a bit more difficult. Typically, you'd want a multiple-root-finding algorithm, because intersection points happen when `f(x)-g(x)=0`, so it suffices to find the zeroes of the function `f(x)-g(x)`. For instance, you can use an interval arithmetic library, [such as this one](https://www.desmos.com/calculator/8vg3p8g8p9).
