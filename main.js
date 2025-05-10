@@ -7,7 +7,7 @@ const files = fs.readdirSync("commands", "utf-8");
 const yamls = [];
 
 let helpMessage = `type: comment
-body (regex): "^(?i)!(help|hlp)[\\\\s\\\\S]*"
+body (regex): "^(?i)\`*\\\\s*!(help|hlp)[\\\\s\\\\S]*"
 comment: "I've PM'ed the list of commands to you!"
 message: |
     # All commands
@@ -16,6 +16,7 @@ message: |
         - Aliases: \`hlp\``;
 
 for (const filename of files) {
+    if (!filename.endsWith(".md")) continue;
     const file = fs.readFileSync("commands/" + filename, "utf-8");
     const { metadata, content } = parseMD(file);
     const description = `\`!${metadata.name}\`: ${metadata.description}`;
@@ -25,7 +26,7 @@ for (const filename of files) {
 
 # ${description}
 type: comment
-body (regex): "^(?i)!(${[metadata.name, ...metadata.aliases].join("|")})[\\\\s\\\\S]*"
+body (regex): "^(?i)\`*\\\\s*!(${[metadata.name, ...metadata.aliases].join("|")})[\\\\s\\\\S]*"
 comment: |
 ${content.trim().split("\n").map(x => "    " + x).join("\n")}`;
 

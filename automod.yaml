@@ -1,15 +1,19 @@
 type: comment
-body (regex): "^(?i)!(help|hlp)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(help|hlp)[\\s\\S]*"
 comment: "I've PM'ed the list of commands to you!"
 message: |
     # All commands
     
     - `!help`: Brings up a list of all the commands.
         - Aliases: `hlp`
+    - `!bernard`: Explains who Bernard is and why he appears in certain graphs!
+        - Aliases: `ourbeloved`, `desmosmascot`
     - `!beta3d`: Explains what Beta3D is and how to install it.
         - Aliases: `3dbeta`
     - `!desmodder`: Describes what DesModder is.
         - Aliases: `dsm`, `dsmodder`
+    - `!exception`: Describes types of floating point exceptions in Desmos, mostly drawn from IEEE specs.
+        - Aliases: `fpexception`, `fpointexception`, `ieeeexception`, `specialcase`, `undef`
     - `!fp`: Describes what floating point arithmetic is and how to mitigate problems associated with it.
         - Aliases: `floatp`, `floatingp`
     - `!grid`: Explains how to make a grid of points.
@@ -18,9 +22,35 @@ message: |
         - Aliases: `getintersect`, `varintersect`
 ---
 
+# `!bernard`: Explains who Bernard is and why he appears in certain graphs!
+type: comment
+body (regex): "^(?i)`*\\s*!(bernard|ourbeloved|desmosmascot)[\\s\\S]*"
+comment: |
+    Open up a graph and type in `tan 35.6x=0`.
+    
+    ![img](7s2h831mdnze1)
+    
+    This is Bernard! He's an artifact resulting from how Desmos's implicit graphing algorithm works.
+    # How does the algorithm work, and why does it result in Bernard?
+    
+    The algorithm is a quadtree-based marching squares algorithm. It divides the screen (actually, a region slightly larger than the screen to capture the edges) into four equal regions (four quads) and divides them again and again recursively (breadth-first). Here are the main rules for whether the quad should be divided (higher rules are higher precedence):
+    1. Descend to depth 5 (1024 uniformly-sized quads)
+    2. Don't descend if the quad is too small (about 10 pixels by 10 pixels, converted to math units)
+    3. Don't descend if the function F is not defined (NaN) at all four vertices of the quad
+    4. Descend if the function F is not defined (NaN) at some, but not all, vertex of the quad
+    5. Don't descend if the gradients and function values indicate that F is approximately locally linear within the quad, or if the quad suggest that the function doesn't passes through F(x)=0
+    6. Otherwise descend
+    
+    The algorithm stops if the total number of quads exceeds `2^14=16384`. Here's a breakdown of how the quads are descended in a high-detail graph:
+    - Point 2 above means that the quads on the edge of the screen (124 of them) don't get descended further. This means that there are only 900 quads left to descend into.
+    - The quota for the remaining quads is `16384-124=16260`. Those quads can divide two more times to get `900*4^2=14400` leaves, and `16260-14400=1860` leaves left to descend.
+    - Since each descending quad results in 4 leaf quads, each descend creates 3 new quads. Hence, there are `1860/3=620` extra subdivisions, which results in a ratio of 620/14400 quads that performed the final subdivision. 
+    - This is basically the ratio of the area of Bernard to the area of the graph paper.
+---
+
 # `!beta3d`: Explains what Beta3D is and how to install it.
 type: comment
-body (regex): "^(?i)!(beta3d|3dbeta)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(beta3d|3dbeta)[\\s\\S]*"
 comment: |
     # Beta3D
     
@@ -66,7 +96,7 @@ comment: |
 
 # `!desmodder`: Describes what DesModder is.
 type: comment
-body (regex): "^(?i)!(desmodder|dsm|dsmodder)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(desmodder|dsm|dsmodder)[\\s\\S]*"
 comment: |
     # Desmodder
     
@@ -103,22 +133,71 @@ comment: |
     There are many, many more features, including pasting ASCIIMath, pinning expressions, graph performance metrics, folder management tools, Mathquill config, displaying code golf stats, debug mode, compact mode, multiline expressions, and bracket highlighting. DesModder is in constant development, so there's more to come!
 ---
 
+# `!exception`: Describes types of floating point exceptions in Desmos, mostly drawn from IEEE specs.
+type: comment
+body (regex): "^(?i)`*\\s*!(exception|fpexception|fpointexception|ieeeexception|specialcase|undef)[\\s\\S]*"
+comment: |
+    # Floating point exceptions
+    
+    Have you wondered why `1/(1/0) = 0` in Desmos? What about `0^0 = 1`? Or what about `tanh(∞) = 1`? To understand why this happens, we need to talk about **floating point exceptions**.
+    
+    ---
+    
+    Desmos runs on Javascript, which in turn follows IEEE 754 double precision (mostly). As such, Desmos inherits many of the exception handling rules that IEEE 754 specifies. Here are some (but probably not all) of these rules:
+    
+    - There are two types of `undefined`: `∞` and `NaN`. To see which is which in the evaluation box, you need to have DesModder installed.
+    - Unless you're using NaN in a boolean type expression (like piecewises or list filters), all other operations on NaN turn into NaN (this is called NaN propagation).
+    - `∞` can be signed. There's `∞` and `-∞`.
+    - There's two types of 0s: 0 and -0. This may seem weird, but this is because `1/0 = ∞` while `1/(-0) = -∞`. Also, `0 + 0 = 0`. `-0 + 0 = 0`. `0 * (-0) = -0`.
+    - Some built-in functions implement behavior relating to `∞`. For example, `tanh(∞)`, `sgn(∞)`, and `erf(∞)` all evaluate to 1. Additionally, something like `tan(π/2)` evaluates to `∞`.
+    - Multiplication: `0 * ∞ = NaN`. `∞ * ∞ = ∞`.
+    - Division by 0: `+/0 = ∞`. `0/0 = NaN`. `-/0 = -∞`.
+    - Division by ∞: `+/∞ = 0`. `∞/∞ = NaN`. `-/∞ = -0`.
+    - Zero powers: `0^+ = 0`. `0^0 = 1`. `0^- = ∞`.
+    - ∞ powers: `∞^+ = ∞`. `∞^0 = 1`. `∞^- = 0`. In other words, `∞^x = 0^(-x)`.
+    - Powers to ∞: `x^∞ = 0` if `-1<x<1`. `(±1)^∞ = NaN`. Otherwise, `x^∞ = ∞`.
+    
+    These rules have some consequences. For example, `0^0^x` can be used to represent `{x > 0, 0}`, which is similar to `sgn()` but ranges from 0 to 1 instead. `1^x` can be used to coerce an ∞ value to a NaN. These compact ways of writing expressions make them useful in golfing, where the goal is to draw certain regions using the fewest symbols possible.
+    
+    **Note**: Many of these power rules do not work in Complex Mode because it uses a different form of arithmetic. They also may not work as intended inside derivatives (e.g. `y = d/dx (0^0^x)` should theoretically become `y = 0 {x ≠ 0}`, but it actually becomes `y = 0 {x > 0}`).
+    
+    For more information on some of these exceptions, refer to the following:
+    - https://en.wikipedia.org/wiki/IEEE_754#Exception_handling
+    - [IEEE report](https://www-users.cse.umn.edu/~vinals/tspot_files/phys4041/2020/IEEE%20Standard%20754-2019.pdf)
+    - [ECMAScript spec](https://tc39.es/ecma262/), [W3C spec](https://www.w3.org/TR/), and [WHATWG spec](https://html.spec.whatwg.org/)
+---
+
 # `!fp`: Describes what floating point arithmetic is and how to mitigate problems associated with it.
 type: comment
-body (regex): "^(?i)!(fp|floatp|floatingp)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(fp|floatp|floatingp)[\\s\\S]*"
 comment: |
     # Floating point arithmetic
     
-    In Desmos and many computational systems, numbers are represented using floating-point arithmetic, which can't precisely represent all real numbers. This leads to tiny rounding errors. For example, `√5` is not represented as exactly `√5`: it uses a finite decimal approximation. This is why doing something like `(√5)^2-5` yields an answer that is very close to, but not exactly 0. If you want to check for equality, you should use an appropriate `ε` value. For example, you could set `ε=10^-9` and then use `{|a-b|<ε}` to check for equality between two values `a` and `b`.
+    In Desmos and many computational systems, numbers are represented using floating point arithmetic, which can't precisely represent all real numbers. This leads to tiny rounding errors. For example, `√5` is not represented as exactly `√5`: it uses a finite decimal approximation. This is why doing something like `(√5)^2-5` yields an answer that is very close to, but not exactly 0. If you want to check for equality, you should use an appropriate `ε` value. For example, you could set `ε=10^-9` and then use `{|a-b|<ε}` to check for equality between two values `a` and `b`.
     
-    There are also other issues related to big numbers. For example, `(2^53+1)-2^53 → 0`. This is because there's not enough precision to represent `2^53+1` exactly, so it rounds. Also, `2^1024` and above is undefined.
+    There are also other issues related to big numbers. For example, `(2^53+1)-2^53` evaluates to 0 instead of 1. This is because there's not enough precision to represent `2^53+1` exactly, so it rounds to `2^53`. These precision issues stack up until `2^1024 - 1`; any number above this is undefined.
+    
+    ## Floating point errors are annoying and inaccurate. Why haven't we moved away from floating point?
+    
+    *TL;DR:* floating point math is *fast*. It's also accurate enough in most cases.
+    
+    There are some solutions to fix the inaccuracies of traditional floating point math:
+    
+    1. **Arbitrary-precision arithmetic:** This allows numbers to use as many digits as needed instead of being limited to 64 bits.
+    2. **Computer algebra system (CAS):** These can solve math problems symbolically before using numerical calculations. For example, a CAS would know that `(√5)^2` equals exactly `5` without rounding errors.
+    
+    The main issue with these alternatives is **speed**. Arbitrary-precision arithmetic is slower because the computer needs to create and manage varying amounts of memory for each number. Regular floating point is faster because it uses a fixed amount of memory that can be processed more efficiently. CAS is even slower because it needs to understand mathematical relationships between values, requiring complex logic and more memory. Plus, when CAS can't solve something symbolically, it still has to fall back on numerical methods anyway.
+    
+    So floating point math is here to stay, despite its flaws. And anyways, the precision that floating point provides is usually enough for most use-cases.
+    
+    ---
     
     For more on floating point numbers, take a look at [radian628's article on floating point numbers in Desmos](https://radian628.github.io/unofficial-desmos-wiki/misc/floating-point-numbers/).
 ---
 
 # `!grid`: Explains how to make a grid of points.
 type: comment
-body (regex): "^(?i)!(grid|ptgrid|pointgrid)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(grid|ptgrid|pointgrid)[\\s\\S]*"
 comment: |
     # Grid of points
     
@@ -131,7 +210,7 @@ comment: |
 
 # `!intersect`: Explains how to assign the intersection of two or more functions as a variable.
 type: comment
-body (regex): "^(?i)!(intersect|getintersect|varintersect)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(intersect|getintersect|varintersect)[\\s\\S]*"
 comment: |
     # Getting the intersection of two or more functions as a variable
     
