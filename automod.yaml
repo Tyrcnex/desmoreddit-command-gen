@@ -7,7 +7,7 @@ message: |
     - `!help`: Brings up a list of all the commands.
         - Aliases: `hlp`
     - `!bernard`: Explains who Bernard is and why he appears in certain graphs!
-        - Aliases: `ourbeloved`, `desmosmascot`
+        - Aliases: `ourbeloved`, `desmosmascot`, `r/foundbernard`
     - `!beta3d`: Explains what Beta3D is and how to install it.
         - Aliases: `3dbeta`
     - `!desmodder`: Describes what DesModder is.
@@ -24,7 +24,7 @@ message: |
 
 # `!bernard`: Explains who Bernard is and why he appears in certain graphs!
 type: comment
-body (regex): "^(?i)`*\\s*!(bernard|ourbeloved|desmosmascot)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(bernard|ourbeloved|desmosmascot|r/foundbernard)[\\s\\S]*"
 comment: |
     Open up a graph and type in `tan 35.6x=0`.
     
