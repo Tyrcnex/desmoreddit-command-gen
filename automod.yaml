@@ -74,20 +74,15 @@ comment: |
             // ==UserScript==
             // @name         Beta3D
             // @namespace    http://tampermonkey.net/
-            // @version      0.11
+            // @version      0.12
             // @description  Enable beta3d query param on desmos 3d
-            // @run-at       document-start
             // @author       You
             // @match        https://www.desmos.com/3d*
             // @grant        none
             // ==/UserScript==
             
-            (function() {
-                'use strict';
-                const url = new URL(location.href);
-                url.searchParams.set("beta3d","");
-                history.pushState({}, "", url);
-            })();
+            await new Promise(res => setInterval(_ => Calc && res(), 200))
+                .then(_ => Calc._calc.graphSettings.config.beta3d = true);
             
     3. Save the script and open the graph!
     
