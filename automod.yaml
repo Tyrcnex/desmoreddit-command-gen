@@ -54,7 +54,7 @@ body (regex): "^(?i)`*\\s*!(beta3d|3dbeta)[\\s\\S]*"
 comment: |
     # Beta3D
     
-    *Please note that Beta 3D does NOT refer to the whole 3D calculator (which is in beta) at https://www.desmos.com/3d.* **Beta 3D consists of the features that come with appending `?beta3d` to the URL**. Features include:
+    *Please note that Beta 3D does NOT refer to the whole 3D calculator (which is in beta) at https://www.desmos.com/3d.* **Beta 3D consists of the following features**:
     
     - Shaders
     - Translucent surfaces (opacity)
@@ -62,7 +62,7 @@ comment: |
     - Clip to box
     - Resolution
     
-    The following simple graph demonstrates all of the above features except for resolution: https://www.desmos.com/3d/qnjl4xx7cp?beta3d=
+    The following simple graph demonstrates all of the above features except for resolution: https://www.desmos.com/3d/qnjl4xx7cp
     
     ![gif](k7ldlfu4bfse1)
     
@@ -86,7 +86,7 @@ comment: |
             
     3. Save the script and open the graph!
     
-    4. If the `?beta3d` flag still gets removed when opening the graph, click on the Tampermonkey extension and check if it says anything about enabling Developer Tools. Follow the instructions that Tampermonkey provides to fix this issue.
+    4. If the graph still doesn't render correctly (e.g. a gray surface instead of a colored surface), click on the Tampermonkey extension and check if it says anything about enabling Developer Tools. Follow the instructions that Tampermonkey provides to fix this issue.
 ---
 
 # `!desmodder`: Describes what DesModder is.
