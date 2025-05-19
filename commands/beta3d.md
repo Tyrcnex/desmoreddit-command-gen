@@ -33,8 +33,7 @@ To use Beta 3D:
         // @grant        none
         // ==/UserScript==
         
-        await new Promise(res => setInterval(_ => Calc && res(), 200))
-            .then(_ => Calc._calc.graphSettings.config.beta3d = true);
+        (f => f(f))(waitCalc => setTimeout(_ => Calc ? (Calc.controller.graphSettings.config.beta3d = true) : waitCalc(), 200));
         
 3. Save the script and open the graph!
 
