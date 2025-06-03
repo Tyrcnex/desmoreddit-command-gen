@@ -1,6 +1,6 @@
 ---
 name: "exception"
-aliases: ["fpexception", "fpointexception", "ieeeexception", "specialcase", "undef"]
+aliases: ["fpexception", "fpointexception", "ieeeexception", "specialcase", "undef", "undefined"]
 description: "Describes types of floating point exceptions in Desmos, mostly drawn from IEEE specs."
 ---
 # Floating point exceptions

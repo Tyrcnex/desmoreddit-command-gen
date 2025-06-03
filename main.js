@@ -6,8 +6,10 @@ import parseMD from 'parse-md';
 const files = fs.readdirSync("commands", "utf-8");
 const yamls = [];
 
+const genRegex = a => `"^(?i)\`*\\\\s*!(${a.join("|")})(\\\\s+|$)[\\\\s\\\\S]*"`
+
 let helpMessage = `type: comment
-body (regex): "^(?i)\`*\\\\s*!(help|hlp)[\\\\s\\\\S]*"
+body (regex): ${genRegex(["help", "hlp"])}
 comment: "I've PM'ed the list of commands to you!"
 message: |
     # All commands
@@ -26,7 +28,7 @@ for (const filename of files) {
 
 # ${description}
 type: comment
-body (regex): "^(?i)\`*\\\\s*!(${[metadata.name, ...metadata.aliases].join("|")})[\\\\s\\\\S]*"
+body (regex): ${genRegex([metadata.name, ...metadata.aliases])}
 comment: |
 ${content.trim().split("\n").map(x => "    " + x).join("\n")}`;
 

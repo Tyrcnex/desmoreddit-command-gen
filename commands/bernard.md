@@ -1,9 +1,6 @@
 ---
 name: bernard
-aliases:
-  - ourbeloved
-  - desmosmascot
-  - r/foundbernard
+aliases: ["ourbeloved", "desmosmascot", "r/foundbernard"]
 description: Explains who Bernard is and why he appears in certain graphs!
 ---
 Open up a graph and type in `tan 35.6x=0`.

@@ -1,6 +1,6 @@
 ---
 name: "fp"
-aliases: ["floatp", "floatingp"]
+aliases: ["floatp", "floatingp", "fpoint", "floatpoint", "floatingpoint"]
 description: "Describes what floating point arithmetic is and how to mitigate problems associated with it."
 ---
 # Floating point arithmetic

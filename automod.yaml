@@ -1,5 +1,5 @@
 type: comment
-body (regex): "^(?i)`*\\s*!(help|hlp)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(help|hlp)(\\s+|$)[\\s\\S]*"
 comment: "I've PM'ed the list of commands to you!"
 message: |
     # All commands
@@ -12,19 +12,25 @@ message: |
         - Aliases: `3dbeta`
     - `!desmodder`: Describes what DesModder is.
         - Aliases: `dsm`, `dsmodder`
+    - `!draw`: Provides Arglin's drawing guide for Desmos art.
+        - Aliases: `arglinguide`, `lineart`
     - `!exception`: Describes types of floating point exceptions in Desmos, mostly drawn from IEEE specs.
-        - Aliases: `fpexception`, `fpointexception`, `ieeeexception`, `specialcase`, `undef`
+        - Aliases: `fpexception`, `fpointexception`, `ieeeexception`, `specialcase`, `undef`, `undefined`
     - `!fp`: Describes what floating point arithmetic is and how to mitigate problems associated with it.
-        - Aliases: `floatp`, `floatingp`
+        - Aliases: `floatp`, `floatingp`, `fpoint`, `floatpoint`, `floatingpoint`
     - `!grid`: Explains how to make a grid of points.
         - Aliases: `ptgrid`, `pointgrid`
+    - `!integral`: Explains why some integrals yield wrong results.
+        - Aliases: `integration`, `integrate`, `wrongintegral`
     - `!intersect`: Explains how to assign the intersection of two or more functions as a variable.
         - Aliases: `getintersect`, `varintersect`
+    - `!roots`: Why can't Desmos find my roots?
+        - Aliases: `zeros`, `zeroes`, `rootfinding`, `root`
 ---
 
 # `!bernard`: Explains who Bernard is and why he appears in certain graphs!
 type: comment
-body (regex): "^(?i)`*\\s*!(bernard|ourbeloved|desmosmascot|r/foundbernard)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(bernard|ourbeloved|desmosmascot|r/foundbernard)(\\s+|$)[\\s\\S]*"
 comment: |
     Open up a graph and type in `tan 35.6x=0`.
     
@@ -50,7 +56,7 @@ comment: |
 
 # `!beta3d`: Explains what Beta3D is and how to install it.
 type: comment
-body (regex): "^(?i)`*\\s*!(beta3d|3dbeta)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(beta3d|3dbeta)(\\s+|$)[\\s\\S]*"
 comment: |
     # Beta3D
     
@@ -90,7 +96,7 @@ comment: |
 
 # `!desmodder`: Describes what DesModder is.
 type: comment
-body (regex): "^(?i)`*\\s*!(desmodder|dsm|dsmodder)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(desmodder|dsm|dsmodder)(\\s+|$)[\\s\\S]*"
 comment: |
     # Desmodder
     
@@ -127,9 +133,20 @@ comment: |
     There are many, many more features, including pasting ASCIIMath, pinning expressions, graph performance metrics, folder management tools, Mathquill config, displaying code golf stats, debug mode, compact mode, multiline expressions, and bracket highlighting. DesModder is in constant development, so there's more to come!
 ---
 
+# `!draw`: Provides Arglin's drawing guide for Desmos art.
+type: comment
+body (regex): "^(?i)`*\\s*!(draw|arglinguide|lineart)(\\s+|$)[\\s\\S]*"
+comment: |
+    # Drawing Guide for Desmos
+    
+    Arglin has made a very good resource for drawing in Desmos. Access it here! [https://redd.it/1k0fitg](https://redd.it/1k0fitg)
+    
+    ![img](oi3udmo4iq1f1)
+---
+
 # `!exception`: Describes types of floating point exceptions in Desmos, mostly drawn from IEEE specs.
 type: comment
-body (regex): "^(?i)`*\\s*!(exception|fpexception|fpointexception|ieeeexception|specialcase|undef)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(exception|fpexception|fpointexception|ieeeexception|specialcase|undef|undefined)(\\s+|$)[\\s\\S]*"
 comment: |
     # Floating point exceptions
     
@@ -163,7 +180,7 @@ comment: |
 
 # `!fp`: Describes what floating point arithmetic is and how to mitigate problems associated with it.
 type: comment
-body (regex): "^(?i)`*\\s*!(fp|floatp|floatingp)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(fp|floatp|floatingp|fpoint|floatpoint|floatingpoint)(\\s+|$)[\\s\\S]*"
 comment: |
     # Floating point arithmetic
     
@@ -191,7 +208,7 @@ comment: |
 
 # `!grid`: Explains how to make a grid of points.
 type: comment
-body (regex): "^(?i)`*\\s*!(grid|ptgrid|pointgrid)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(grid|ptgrid|pointgrid)(\\s+|$)[\\s\\S]*"
 comment: |
     # Grid of points
     
@@ -202,9 +219,25 @@ comment: |
     You may omit the outer square brackets. For more, see the [Lists help article](https://help.desmos.com/hc/en-us/articles/4407889068557-Lists), and scroll down to the section labeled "List Comprehension".
 ---
 
+# `!integral`: Explains why some integrals yield wrong results.
+type: comment
+body (regex): "^(?i)`*\\s*!(integral|integration|integrate|wrongintegral)(\\s+|$)[\\s\\S]*"
+comment: |
+    # Why does my integral yield a wrong result?
+    
+    You may have noticed that some integrals do not yield correct results in Desmos. For example, integrating `{0.9 < x < 1, 0}` from -2 to 2 incorrectly gives 0 instead of 0.1^([\[1\]](https://redd.it/u60234)). Similarly, certain improper integrals are not evaluated correctly; for instance, the integral of `(sin x)/x` from -∞ to ∞ should be π, but Desmos reports it as undefined (`NaN`). In another case, the integral of `1/(x ln x)` from 2 to ∞ is reported as `4.01927944912`, even though it should actually diverge^([\[2\]](https://redd.it/1jyaaic)).
+    
+    Some possible reasons why Desmos reports these integrals incorrectly:
+    
+    - **For finite bounds:** Desmos uses 65 initial sample points for tanh-sinh quadrature. If all sample points miss important features of the function (which is often the case with discontinuous functions) the reported value can be incorrect^([\[3\]](https://redd.it/u60234))^([\[graph\]](https://www.desmos.com/calculator/06pjqkck2x)).
+    - **For infinite bounds:** Desmos applies a rational change of variables to convert the problem to one with finite bounds^([\[2\]](https://redd.it/1jyaaic))^([\[4\]](https://x.com/shapeoperator/status/1280925334037094400)). However, the transformed integral may still diverge at the bounds (for example, after the change of variables, `(sin x)/x` oscillates infinitely at the new finite bounds).
+    
+    Ultimately, all numerical integration schemes use a finite number of sample points, which can lead to incorrect results in some cases. Switching from numerical to symbolic integration would significantly impact performance, and the Desmos developers are still working on ways to address these limitations^([\[5\]](https://x.com/shapeoperator/status/1447950028648206340)).
+---
+
 # `!intersect`: Explains how to assign the intersection of two or more functions as a variable.
 type: comment
-body (regex): "^(?i)`*\\s*!(intersect|getintersect|varintersect)[\\s\\S]*"
+body (regex): "^(?i)`*\\s*!(intersect|getintersect|varintersect)(\\s+|$)[\\s\\S]*"
 comment: |
     # Getting the intersection of two or more functions as a variable
     
@@ -223,3 +256,24 @@ comment: |
     If you want to find one intersection point *without* regression, you can try using simple root-finding algorithms such as Newton-Raphson or the bisection method.
     
     If you need *all* intersection points, that's a bit more difficult. Typically, you'd want a multiple-root-finding algorithm, because intersection points happen when `f(x)-g(x)=0`, so it suffices to find the zeroes of the function `f(x)-g(x)`. For instance, you can use an interval arithmetic library, [such as this one](https://www.desmos.com/calculator/8vg3p8g8p9).
+---
+
+# `!roots`: Why can't Desmos find my roots?
+type: comment
+body (regex): "^(?i)`*\\s*!(roots|zeros|zeroes|rootfinding|root)(\\s+|$)[\\s\\S]*"
+comment: |
+    # Desmos can't find my roots!
+    
+    Consider the equation `cos x = 1`. The solutions should occur at multiples of 2π, so the graph should display infinitely many vertical lines. However, nothing appears. In contrast, if you change the equation to `cos x = 0`, Desmos correctly graphs infinitely many lines at the appropriate locations. Why does Desmos find the correct solutions to one equation but not the other?
+    
+    When Desmos solves equations, it detects *sign changes* in the corresponding function. For example, with the equation `cos x = 0`, Desmos analyzes the function `f(x) = cos x` to find where it changes sign. Near `x = π/2`, we have `f(1.57) = 0.0007963` and `f(1.571) = -0.00020367`. Since the function changes from negative to positive, Desmos detects a solution at `x = 1`.
+    
+    However, for `cos x = 1`, Desmos looks for sign changes in `f(x) = cos x - 1`. Since this function is always non-positive (never crossing zero from below), no sign change occurs, and nothing gets graphed. Similarly, `√x = 0` produces no graph, even at `x = 0`, because moving from left to right, the function goes from undefined (`NaN`) to positive values.
+    
+    This approach can produce unexpected behavior with discontinuous functions like `floor(x)`. For instance, `floor(x) = 2` graphs the line `x = 3` because that's where `floor(x) - 2` first changes sign from negative to positive:
+    
+    | `x`          | 1  | 1.5 | 2 | 2.5 | **3** | 3.5 |
+    |--------------|----|-----|---|-----|-------|-----|
+    | `floor(x)-2` | -1 | -1  | 0 | 0   | **1** | 1   |
+    
+    Desmos uses similar logic for inequalities: it first applies the sign-change technique to find boundaries, then fills in the appropriate regions. This explains why `floor(x) > 2` graphs `x > 3`.
